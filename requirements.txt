@@ -1,0 +1,7 @@
+# Minimal dependencies for post-processing and manuscript asset generation.
+# Evidence is read from an external, locked campaign directory.
+
+numpy
+pandas
+matplotlib
+pytest

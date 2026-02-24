@@ -1,0 +1,19 @@
+This manuscript is evidence-locked: all tables and figures are generated from a single immutable campaign (\CampaignID) produced by the companion computational study. The campaign directory contains frozen benchmark instances, a full run plan, an environment snapshot, and a command log. Importantly, we do not rerun any solver when building the manuscript; the submission pipeline reads the frozen CSV/JSON artifacts and deterministically regenerates all LaTeX tables/figures and both camera-ready and anonymous PDFs.
+
+A minimal regeneration workflow is:
+\begin{verbatim}
+cd /path/to/uav-tr-e-submit-v3
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-lock.txt
+
+PYTHONPATH=src python -m uavtre_submit_v3.run \
+  --campaign-id <campaign_id> \
+  --evidence-root <path_to_outputs/campaigns> \
+  --audit-json <path_to_audit_json> \
+  --mode full --pdf-variant camera_ready
+\end{verbatim}
+
+The pipeline additionally builds a TR-E upload pack (ZIP) that contains the compiled PDF, LaTeX source, metadata, highlights, a cover letter, an audit recheck, a claim-evidence map, a table/figure index, and SHA256 checksums.
+
+We follow reproducible computational research principles as advocated by \citet{peng2011,stodden2016,sandve2013}.

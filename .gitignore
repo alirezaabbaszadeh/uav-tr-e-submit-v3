@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Build outputs
+out/
+bundles/
+
+# LaTeX intermediates
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.spl
+
+# Generated manuscript assets (keep .gitkeep)
+manuscript/tr_e/generated/tables/*
+!manuscript/tr_e/generated/tables/.gitkeep
+manuscript/tr_e/generated/figures/*
+!manuscript/tr_e/generated/figures/.gitkeep
+manuscript/tr_e/generated/campaign_lock.tex
+
+# OS
+.DS_Store

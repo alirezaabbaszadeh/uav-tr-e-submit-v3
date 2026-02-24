@@ -1,0 +1,7 @@
+# Pinned versions used in the current environment.
+# Regenerate (if needed) by installing requirements.txt and freezing.
+
+numpy==2.3.4
+pandas==2.3.3
+matplotlib==3.10.7
+pytest==8.4.2
