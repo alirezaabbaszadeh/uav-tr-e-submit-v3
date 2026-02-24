@@ -452,6 +452,107 @@ Evidence style & Heuristic/RL performance without global certificates. & Certifi
     return _write_raw_tex(out_path=out_path, tex=tex)
 
 
+def _write_fig_conceptual_discretization(*, out_path: Path) -> Path:
+    """Conceptual diagram: continuous environment -> discrete weighted graph.
+
+    This figure is illustrative and does not depend on campaign data.
+    """
+
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import FancyArrowPatch, Polygon, Rectangle
+
+    fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10.2, 3.6))
+
+    # Left: continuous environment (micro-level).
+    ax0.set_title("Continuous environment (micro-level)")
+    ax0.set_xlim(0, 1)
+    ax0.set_ylim(0, 1)
+    ax0.set_aspect("equal", adjustable="box")
+    ax0.axis("off")
+    ax0.add_patch(Rectangle((0, 0), 1, 1, facecolor="#f7f7f7", edgecolor="#bbbbbb", lw=1.0))
+
+    depot = (0.15, 0.2)
+    clients = [(0.30, 0.75), (0.55, 0.85), (0.82, 0.55), (0.70, 0.25), (0.42, 0.35)]
+    bs = [(0.18, 0.85), (0.85, 0.85), (0.85, 0.15)]
+
+    ax0.scatter([c[0] for c in clients], [c[1] for c in clients], s=28, c="#1f77b4", label="Clients")
+    ax0.scatter([depot[0]], [depot[1]], s=90, c="#d62728", marker="*", label="Depot")
+    ax0.scatter([b[0] for b in bs], [b[1] for b in bs], s=55, c="#2ca02c", marker="s", label="Base stations")
+
+    obs1 = Polygon([[0.28, 0.55], [0.40, 0.60], [0.38, 0.72], [0.25, 0.70]], closed=True, facecolor="#d0d0d0", edgecolor="#aaaaaa")
+    obs2 = Polygon([[0.58, 0.40], [0.74, 0.42], [0.78, 0.58], [0.60, 0.55]], closed=True, facecolor="#d0d0d0", edgecolor="#aaaaaa")
+    ax0.add_patch(obs1)
+    ax0.add_patch(obs2)
+
+    traj = [depot, (0.22, 0.40), (0.35, 0.62), (0.55, 0.78), (0.75, 0.65), (0.82, 0.55), (0.70, 0.25), depot]
+    ax0.plot([p[0] for p in traj], [p[1] for p in traj], lw=2.0, c="#111111", alpha=0.9)
+    ax0.text(0.02, 0.02, "Trajectory refinement\n+ link constraints", fontsize=9, va="bottom")
+    ax0.legend(loc="upper left", frameon=False, fontsize=8)
+
+    # Right: discrete weighted graph (macro-level).
+    ax1.set_title("Discrete weighted graph (macro-level)")
+    ax1.set_xlim(0, 1)
+    ax1.set_ylim(0, 1)
+    ax1.set_aspect("equal", adjustable="box")
+    ax1.axis("off")
+    ax1.add_patch(Rectangle((0, 0), 1, 1, facecolor="#f7f7f7", edgecolor="#bbbbbb", lw=1.0))
+
+    nodes = {"Depot": depot}
+    for idx2, c in enumerate(clients, start=1):
+        nodes[str(idx2)] = c
+
+    edges = [("Depot", "1", 0.30), ("1", "2", 0.60), ("2", "3", 0.90), ("3", "4", 0.50), ("4", "5", 0.40), ("5", "Depot", 0.70)]
+    cmap = plt.cm.viridis
+    for a, b, w in edges:
+        xa, ya = nodes[a]
+        xb, yb = nodes[b]
+        ax1.plot([xa, xb], [ya, yb], lw=2.0, c=cmap(w), alpha=0.95)
+
+    # Sampling points (K samples) on one edge.
+    xa, ya = nodes["2"]
+    xb, yb = nodes["3"]
+    for t in [0.2, 0.4, 0.6, 0.8]:
+        ax1.scatter([xa + t * (xb - xa)], [ya + t * (yb - ya)], s=14, c="#000000", alpha=0.8)
+
+    for name, (x, y) in nodes.items():
+        if name == "Depot":
+            ax1.scatter([x], [y], s=90, c="#d62728", marker="*", zorder=3)
+        else:
+            ax1.scatter([x], [y], s=28, c="#1f77b4", zorder=3)
+        ax1.text(x + 0.015, y + 0.015, name, fontsize=8)
+
+    ax1.text(
+        0.02,
+        0.02,
+        "Arc weight: $c_{ij}=\\alpha E_{ij}+\\beta R_{ij}$\nRisk precompute via $K$ samples",
+        fontsize=9,
+        va="bottom",
+    )
+
+    fig.add_artist(
+        FancyArrowPatch(
+            (0.49, 0.50),
+            (0.51, 0.50),
+            transform=fig.transFigure,
+            arrowstyle="simple",
+            mutation_scale=18,
+            fc="#666666",
+            ec="#666666",
+            alpha=0.9,
+        )
+    )
+
+    fig.tight_layout()
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_path, bbox_inches="tight")
+    plt.close(fig)
+    return out_path
+
+
 def _write_fig_scenario_overview(*, campaign_dir: Path, out_path: Path) -> Path:
     # Use one audited benchmark instance from the campaign (not re-generated).
     candidates = sorted((campaign_dir / "benchmarks" / "main_A_core").glob("seed*_N20_*.json"))
@@ -845,6 +946,7 @@ def generate_assets(*, campaign_dir: Path, manuscript_root: Path, base_config_pa
     written.append(_write_positioning_table(out_path=tables_dir / "tab_positioning_micro_vs_macro.tex"))
 
     # Figures.
+    written.append(_write_fig_conceptual_discretization(out_path=figures_dir / "fig_conceptual_discretization.pdf"))
     written.append(_write_fig_scenario_overview(campaign_dir=campaign_dir, out_path=figures_dir / "fig_scenario_overview.pdf"))
     written.append(_write_fig_bs_delta_effect(campaign_dir=campaign_dir, out_path=figures_dir / "fig_bs_delta_effect.pdf"))
     written.append(_write_fig_lambda_tw_tradeoff(campaign_dir=campaign_dir, out_path=figures_dir / "fig_tradeoff_lambda_tw.pdf"))

@@ -17,6 +17,7 @@ class QAChecks:
     bibliography_count_ge_45: bool
     huang_cited_ge_2: bool
     required_tables_present: bool
+    required_figures_present: bool
     pack_passed: bool
 
 
@@ -88,6 +89,11 @@ def run_qa(
     ]
     required_tables_present = all(p.exists() for p in required_tables)
 
+    required_figures = [
+        manuscript_root / "generated" / "figures" / "fig_conceptual_discretization.pdf",
+    ]
+    required_figures_present = all(p.exists() for p in required_figures)
+
     pack_path = out_submission_dir / f"TR_E_UPLOAD_PACK_{campaign_id}.zip"
     pack_check = check_pack(pack_path, campaign_id)
     pack_passed = bool(pack_check.get("passed", False))
@@ -100,6 +106,7 @@ def run_qa(
         bibliography_count_ge_45=bibliography_count_ge_45,
         huang_cited_ge_2=huang_cited_ge_2,
         required_tables_present=required_tables_present,
+        required_figures_present=required_figures_present,
         pack_passed=pack_passed,
     )
 
@@ -113,10 +120,14 @@ def run_qa(
             "bibliography_count_ge_45": checks.bibliography_count_ge_45,
             "huang_cited_ge_2": checks.huang_cited_ge_2,
             "required_tables_present": checks.required_tables_present,
+            "required_figures_present": checks.required_figures_present,
             "pack_passed": checks.pack_passed,
         },
         "bibliography": {"count": bib_count, "min_required": 45},
-        "assets": {"required_tables": [p.as_posix() for p in required_tables]},
+        "assets": {
+            "required_tables": [p.as_posix() for p in required_tables],
+            "required_figures": [p.as_posix() for p in required_figures],
+        },
         "pack_check": pack_check,
     }
 

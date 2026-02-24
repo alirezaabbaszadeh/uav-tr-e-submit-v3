@@ -140,6 +140,7 @@ def _write_submission_texts(*, campaign_id: str, out_submission_dir: Path) -> No
         "- `manuscript/tr_e/generated/tables/tab_managerial_support.tex`\n"
         "- `manuscript/tr_e/generated/tables/tab_risk_signal.tex`\n\n"
         "## Figures (generated)\n"
+        "- `manuscript/tr_e/generated/figures/fig_conceptual_discretization.pdf`\n"
         "- `manuscript/tr_e/generated/figures/fig_scenario_overview.pdf`\n"
         "- `manuscript/tr_e/generated/figures/fig_bs_delta_effect.pdf`\n"
         "- `manuscript/tr_e/generated/figures/fig_tradeoff_lambda_tw.pdf`\n"

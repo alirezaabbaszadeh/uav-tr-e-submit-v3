@@ -17,6 +17,15 @@ A set of $B$ base stations with known planar coordinates is given. Along a fligh
 \paragraph{Discrete routing abstraction vs. continuous trajectory.}
 We model the city as a weighted graph over depot/customers and estimate arc risk by sampling along each edge. This discretization is intentional: it allows arc risks to be precomputed once per scenario, enabling deterministic, CPU-scalable experimentation and auditable sensitivity analysis at fleet scale. In contrast, continuous-space trajectory optimization can better capture flight dynamics but typically couples routing decisions with nonconvex control, making global certification and campaign-scale benchmarking more difficult.
 
+\paragraph{Conceptual overview.}
+Figure~\ref{fig:conceptual_discretization} provides a conceptual view of the modeling pipeline: a continuous physical environment and link abstraction are mapped into a discrete weighted graph whose arc weights combine energy and outage-risk proxies. This is the key engineering step that enables fleet-scale routing and conservative, auditable benchmarking.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{generated/figures/fig_conceptual_discretization.pdf}
+\caption{Conceptual abstraction from continuous environment to a discrete weighted routing graph (energy + outage risk).}
+\label{fig:conceptual_discretization}
+\end{figure}
+
 \paragraph{Time-window families A and B.}
 To study robustness under service stress, we define two time-window families. Family A is a baseline construction around a deterministic schedule proxy, while Family B applies a controlled tightening and jittering of windows to induce higher tardiness pressure while preserving comparability across instances. Table~\ref{tab:tw_families} provides an exact, code-aligned definition.
 

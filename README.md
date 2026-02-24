@@ -7,6 +7,15 @@ This repo reads a single **locked evidence campaign** (CSV/JSON artifacts) and r
 - camera-ready + anonymous PDFs
 - a TR-E portal upload pack ZIP
 
+## Prebuilt PDF (GitHub Releases)
+The manuscript PDF and submission pack ZIP are **not committed** to git (they are generated outputs).
+
+Download them from GitHub Releases (latest tag):
+- `main.pdf`
+- `TR_E_UPLOAD_PACK_journal_v3_full_20260219_000231.zip`
+- `source_journal_v3_full_20260219_000231.zip`
+- `FINAL_QA_REPORT_journal_v3_full_20260219_000231.json`
+
 ## Evidence (immutable input)
 Default evidence source used in our lab setup:
 - `/home/ali/code/UAV/uav_tr_e_project/outputs/campaigns/journal_v3_full_20260219_000231`
