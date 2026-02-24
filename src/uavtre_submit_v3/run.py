@@ -84,7 +84,7 @@ def _ensure_metadata_template(out_submission_dir: Path) -> Path:
         "affiliations: Department of Computer Engineering, Islamic Azad University, Mashhad, Iran\n"
         "funding: No external funding.\n"
         "conflicts: The author declares no conflict of interest.\n"
-        "data_code_availability: \"Code and locked evidence artifacts: https://github.com/alirezaabbaszadeh/uav-tr-e-journal-repro/releases/tag/v1.5.0-journal-repro.\"\n",
+        "data_code_availability: \"Locked evidence + manuscript build pipeline: https://github.com/alirezaabbaszadeh/uav-tr-e-submit-v3 (campaign journal_v3_full_20260219_000231). Computational repo: https://github.com/alirezaabbaszadeh/uav-tr-e-journal-repro.\"\n",
         encoding="utf-8",
     )
     return tpl

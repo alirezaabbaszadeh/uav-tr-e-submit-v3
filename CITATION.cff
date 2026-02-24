@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated manuscript and evidence campaign."
+title: "Reliability-Aware Multi-UAV Routing under Communication Outage Risk and Soft Time Windows"
+type: software
+authors:
+  - family-names: "Abbaszadeh"
+    given-names: "Alireza"
+    email: "alireza.abbaszadeh8558@iau.ir"
+    affiliation: "Department of Computer Engineering, Islamic Azad University, Mashhad, Iran"
+license: MIT
+repository-code: "https://github.com/alirezaabbaszadeh/uav-tr-e-submit-v3"
